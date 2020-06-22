@@ -49,6 +49,11 @@ class TimeBlock {
   generateHtml(parent) {
     let textBoxId = "taskInputBox" + this.hour;
     let taskSaveBtnId = "taskSaveBtn" + this.hour;
+    let currentTime = moment().hour();
+    console.log(currentTime);
+    // calc past, now, fture
+    // check wether current hour is smaller, greater or same as this.hour
+
     parent.append(
       $(`<div class="row">
     <div class="col">
@@ -65,6 +70,13 @@ class TimeBlock {
   </div>`)
     );
     $("#" + taskSaveBtnId).click((evt) => this.handleClick(evt));
+    if (this.hour > currentTime) {
+      $("#" + textBoxId).addClass("future");
+    } else if (this.hour < currentTime) {
+      $("#" + textBoxId).addClass("past");
+    } else if (this.hour === currentTime) {
+      $("#" + textBoxId).addClass("present");
+    }
   }
 }
 
