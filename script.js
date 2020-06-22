@@ -18,14 +18,17 @@ event listeners on save send textarea content to localstorage
 
 window.onload = function () {
   let container = $("#timeBlockContainer");
+  let timeBlockArrayAsString = localStorage.getItem("timeBlockArray");
+  if (timeBlockArrayAsString != null) {
+    let timeBlocks = JSON.parse(timeBlockArrayAsString);
+    timeBlockArray = timeBlocks.flatMap(function (element) {
+      return new TimeBlock(element.hour, element.text);
+    });
+  }
   timeBlockArray.forEach(function (aTimeBlock) {
     aTimeBlock.generateHtml(container);
   });
 };
-
-const createRowDiv = $("<div />").addClass("row");
-const createColDiv = $("<div />");
-const hourEle = $();
 
 class TimeBlock {
   constructor(hour, text) {
@@ -34,7 +37,13 @@ class TimeBlock {
   }
 
   handleClick(evt) {
+    let textBoxId = "#taskInputBox" + this.hour;
+
     console.log("HERE" + this.hour);
+    let taskText = $(textBoxId).val();
+    console.log(taskText);
+    this.text = taskText;
+    localStorage.setItem("timeBlockArray", JSON.stringify(timeBlockArray));
   }
 
   generateHtml(parent) {
@@ -55,18 +64,18 @@ class TimeBlock {
     </div>
   </div>`)
     );
-    $("#" + taskSaveBtnId).click(this.handleClick);
+    $("#" + taskSaveBtnId).click((evt) => this.handleClick(evt));
   }
 }
 
 let timeBlockArray = [
-  new TimeBlock(9, "blah ablha"),
+  new TimeBlock(9, ""),
   new TimeBlock(10, ""),
   new TimeBlock(11, ""),
   new TimeBlock(12, ""),
-  new TimeBlock(13, "this text"),
+  new TimeBlock(13, ""),
   new TimeBlock(14, ""),
   new TimeBlock(15, ""),
-  new TimeBlock(16, " lorem ipsum"),
+  new TimeBlock(16, ""),
   new TimeBlock(17, ""),
 ];
